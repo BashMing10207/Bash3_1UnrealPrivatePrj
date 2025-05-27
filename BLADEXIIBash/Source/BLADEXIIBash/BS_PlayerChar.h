@@ -1,0 +1,99 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "BS_BaseChar.h"
+#include "BS_PlayerChar.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class BLADEXIIBASH_API ABS_PlayerChar : public ABS_BaseChar
+{
+	GENERATED_BODY()
+	ABS_PlayerChar();
+protected:
+	// Called when the game starts or when spawned
+	
+	virtual void BeginPlay() override;
+
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void Movement(float DeltaTIme) override;
+
+	virtual void Sprint(bool isrunning) override;
+
+	virtual void Jump() override;
+
+	virtual void Crouch(bool isCrouch) override;
+
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	
+	void Move(const struct FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void JumpPressed(const FInputActionValue& Value);
+	void JumpReleased(const FInputActionValue& Value);
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	class UInputMappingContext* DefaultMappingContext;
+
+	// 에디터에서 생성한 Input Action 자산들
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	class UInputAction* MoveAction;
+    
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* LookAction;
+    
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* JumpAction;
+
+	// …기존 코드 위쪽…
+
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
+	class UCameraComponent* CameraComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
+	class USpringArmComponent* SpringArmCompo;
+	
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float MaxSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float Acceleration = 2000.f;
+
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float JumpImpulse = 350.f;
+
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float Dampening = 3.f;
+
+	// 캡슐 높이(대략 2m → 200cm 단위가 Unreal 기본)
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float PlayerHeight = 180.f;
+
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float PlayerRadius = 34.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Movement|Physics")
+	TEnumAsByte<ECollisionChannel> GroundChannel = ECC_WorldStatic;
+
+	// 입력 저장용
+	FVector MovementInput;
+
+	
+
+	// 상태 플래그
+	bool bCanJump = false;
+	bool bIsGround = false;
+
+
+};
