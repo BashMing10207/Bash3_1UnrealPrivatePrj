@@ -55,9 +55,10 @@ void ABS_BaseChar::Rotate(float DeltaTime)
 // Called every frame
 void ABS_BaseChar::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	//Super::Tick(DeltaTime);
 	Rotate(DeltaTime);
 	Movement(DeltaTime);
+	TickV2(DeltaTime);
 }
 
 // Called to bind functionality to input

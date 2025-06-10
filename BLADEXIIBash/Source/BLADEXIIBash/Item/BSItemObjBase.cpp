@@ -2,6 +2,7 @@
 
 
 #include "Item/BSItemObjBase.h"
+#include "AdvencedInteractableObjCompo.h"
 
 // Sets default values
 ABSItemObjBase::ABSItemObjBase()
@@ -9,6 +10,7 @@ ABSItemObjBase::ABSItemObjBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	InteractableObjCompo = CreateDefaultSubobject<UAdvencedInteractableObjCompo>("InteractableObjCompo");
 }
 
 // Called when the game starts or when spawned

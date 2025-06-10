@@ -6,14 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "BSArmComponent.generated.h"
 
-UCLASS()
-class BLADEXIIBASH_API ABSArmComponent : public AActor
+UCLASS(Blueprintable,BlueprintType,meta=(BlueprintSpawnableComponent))
+class BLADEXIIBASH_API ABSArmComponent_C : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABSArmComponent();
+	ABSArmComponent_C();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,7 +23,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetHandPosTarget(FTransform BodyPos);
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void SetHandPosTarget(FTransform BodyPos,FTransform TArgetPos);
+	void ApplyHandPosTarget();
 	void SetUpBodyJoint(UPrimitiveComponent* BodyCompo);
 	void SetUpBodyJoint(UPrimitiveComponent* BodyCompo,FName BOneName);
 	
@@ -34,7 +36,12 @@ protected:
 	// TObjectPtr<USkeletalMeshComponent> Visual;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	TObjectPtr<class UStaticMeshComponent> HandPoint;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
+	TObjectPtr<class USceneComponent> TestCompo;
 	
+	class ABSItemObjBase* HoldingItem;
+	class AActor* OwningPawn;
 	
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
@@ -43,4 +50,5 @@ protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UBoxComponent> Box;
 };
+
 

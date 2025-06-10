@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
 #include "BSItemObjBase.generated.h"
 
@@ -26,12 +27,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	inline UPhysicsConstraintComponent* GetPhysicsConstraint()
-	{
-		return PhysicsConstraint;
-	}
+
 	
 protected:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
-	TObjectPtr<class UPhysicsConstraintComponent> PhysicsConstraint;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UMeshComponent> MeshCompo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UAdvencedInteractableObjCompo> InteractableObjCompo;
 };

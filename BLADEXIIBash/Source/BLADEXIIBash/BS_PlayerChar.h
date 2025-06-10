@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BS_BaseChar.h"
 #include "BS_PlayerChar.generated.h"
 
@@ -40,6 +41,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	
 	protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	class UInputMappingContext* DefaultMappingContext;
@@ -89,8 +92,13 @@ protected:
 	// 입력 저장용
 	FVector MovementInput;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	TArray<class ABSArmComponent_C*> ArmComponents;
 	
-
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	class UStaticMeshComponent* TempArmTarget1;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	class UStaticMeshComponent* TempArmTarget2;
 	// 상태 플래그
 	bool bCanJump = false;
 	bool bIsGround = false;

@@ -24,5 +24,6 @@ class BLADEXIIBASH_API IIBSHoldingInteractiveable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	ABSItemObjBase* UseItemObj(ABSArmComponent* UsingArm, AActor* Caller);
+	ABSItemObjBase* UseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	ABSItemObjBase* ALTUseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
 };

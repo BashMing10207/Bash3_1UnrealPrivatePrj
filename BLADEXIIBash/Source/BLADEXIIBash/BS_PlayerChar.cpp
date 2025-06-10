@@ -11,6 +11,7 @@
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "BSArmComponent.h"
 
 ABS_PlayerChar::ABS_PlayerChar()
 {
@@ -18,11 +19,22 @@ ABS_PlayerChar::ABS_PlayerChar()
 	SpringArmCompo->SetupAttachment(RootComponent);
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComp->SetupAttachment(SpringArmCompo);
+
+	
+	
+	
+	TempArmTarget1 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget1");
+	TempArmTarget1->SetupAttachment(CameraComp);
+	TempArmTarget2 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget2");
+	TempArmTarget2->SetupAttachment(CameraComp);
 }
 
 void ABS_PlayerChar::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ArmComponents[0]->SetUpBodyJoint(BaseBodyCompo);
+	ArmComponents[1]->SetUpBodyJoint(BaseBodyCompo);
 }
 
 void ABS_PlayerChar::PossessedBy(AController* NewController)
@@ -182,4 +194,14 @@ void ABS_PlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//Movement(DeltaTime);
+
+	// for (int i = 0; i < ArmComponents.Num(); i++)
+	// {
+	//if (ArmComponents.Num() > 0)
+	{
+		ArmComponents[0]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget1->GetComponentTransform());
+		ArmComponents[1]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget2->GetComponentTransform());
+	}
+	//}
+
 }

@@ -21,6 +21,6 @@ class BLADEXIIBASH_API IIBSArmUSE
 {
 	GENERATED_BODY()
 
-	ABSArmComponent* UseArm(AActor* Caller);
+	ABSArmComponent_C* UseArm(AActor* Caller);
 public:
 };

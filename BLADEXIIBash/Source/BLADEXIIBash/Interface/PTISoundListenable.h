@@ -3,15 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BSArmComponent.h"
 #include "UObject/Interface.h"
-#include "Item/BSItemObjBase.h"
-#include "IBSInteractiveable.generated.h"
-
+#include "PTISoundListenable.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UIBSInteractiveable : public UInterface
+class UPTISoundListenable : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -19,11 +16,12 @@ class UIBSInteractiveable : public UInterface
 /**
  * 
  */
-class BLADEXIIBASH_API IIBSInteractiveable
+class BLADEXIIBASH_API IPTISoundListenable
 {
 	GENERATED_BODY()
-
+protected:
+	UFUNCTION(Blueprintable, BlueprintNativeEvent)
+	void ListenSound(FVector Pos);
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	ABSItemObjBase* UseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
 };
