@@ -11,6 +11,20 @@ ABSItemObjBase::ABSItemObjBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	InteractableObjCompo = CreateDefaultSubobject<UAdvencedInteractableObjCompo>("InteractableObjCompo");
+
+	
+}
+ASkeltalMeshItemObjBase::ASkeltalMeshItemObjBase()
+{
+	MeshCompo = CreateDefaultSubobject<USkeletalMeshComponent>("MeshCompo");
+
+	RootComponent = MeshCompo;
+}
+
+AStaticMeshItemObjBase::AStaticMeshItemObjBase()
+{
+	MeshCompo = CreateDefaultSubobject<UStaticMeshComponent>("MeshCompo");
+	RootComponent = MeshCompo;	
 }
 
 // Called when the game starts or when spawned
@@ -26,4 +40,55 @@ void ABSItemObjBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+ABSItemObjBase* ABSItemObjBase::DOInteractive_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
+if (UsingArm == nullptr)
+	return nullptr;
+if (HoldingArm != nullptr)
+	return nullptr;
+	
+	HoldingArm = UsingArm;
+	BeAttach(true);
+	
+
+	
+	return this;
+}
+
+ABSItemObjBase* ABSItemObjBase::UseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
+	return this;
+}
+
+ABSItemObjBase* ABSItemObjBase::ALTUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
+	return this;
+}
+
+ABSItemObjBase* ABSItemObjBase::ReleaseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
+	BeAttach(false);
+	
+	return this;
+}
+
+void ABSItemObjBase::BeAttach(bool isAttach)
+{
+	if (isAttach)
+	{
+		MeshCompo->SetSimulatePhysics(false);
+		MeshCompo->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		MeshCompo->SetSimulatePhysics(true);
+		MeshCompo->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		SetOwner(nullptr);
+		HoldingArm = nullptr;
+	}
+}
+
+
 

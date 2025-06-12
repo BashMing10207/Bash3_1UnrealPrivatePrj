@@ -6,7 +6,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PT_API UAdvencedInteractableObjCompo : public UActorComponent
+class BLADEXIIBASH_API UAdvencedInteractableObjCompo : public UActorComponent
 {
 	GENERATED_BODY()
 

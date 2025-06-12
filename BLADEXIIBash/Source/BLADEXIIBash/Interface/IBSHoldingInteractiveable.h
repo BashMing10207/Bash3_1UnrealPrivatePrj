@@ -3,8 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BSArmComponent.h"
-#include "Item/BSItemObjBase.h"
+
 #include "UObject/Interface.h"
 #include "IBSHoldingInteractiveable.generated.h"
 
@@ -24,6 +23,11 @@ class BLADEXIIBASH_API IIBSHoldingInteractiveable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	ABSItemObjBase* UseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	class ABSItemObjBase* UseItemObj(class ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
 	ABSItemObjBase* ALTUseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	ABSItemObjBase* ReleaseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	
 };

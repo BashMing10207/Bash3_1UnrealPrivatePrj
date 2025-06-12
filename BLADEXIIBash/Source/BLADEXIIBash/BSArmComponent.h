@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/IBSArmUSE.h"
+#include "Interface/IUsingArmType.h"
+
 #include "BSArmComponent.generated.h"
 
 UCLASS(Blueprintable,BlueprintType,meta=(BlueprintSpawnableComponent))
-class BLADEXIIBASH_API ABSArmComponent_C : public AActor
+class BLADEXIIBASH_API ABSArmComponent_C : public AActor, public IIBSArmUSE
 {
 	GENERATED_BODY()
 	
@@ -28,20 +31,52 @@ public:
 	void ApplyHandPosTarget();
 	void SetUpBodyJoint(UPrimitiveComponent* BodyCompo);
 	void SetUpBodyJoint(UPrimitiveComponent* BodyCompo,FName BOneName);
+
+
+	void SetHoldingItem(class ABSItemObjBase* ItemB);
+
+	UFUNCTION(BlueprintCallable)
+	void SetReverseArmComponent(class ABSArmComponent_C* ArmB)
+	{
+		ReverseArmComponent = ArmB;
+	}
 	
+	protected:
+	virtual class ABSArmComponent_C* UseArm_Implementation(AActor* Caller) override;
+	
+	
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
+	void NoItemUseArm(AActor* Caller);
+
+	void GrabArm(AActor* Caller);
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	ABSItemObjBase* HoldingItem;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsRight = true;
 protected:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
-	TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
-	// TObjectPtr<USkeletalMeshComponent> Visual;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
-	TObjectPtr<class UStaticMeshComponent> HandPoint;
+	// TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;
+	//
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
+	// TObjectPtr<class UStaticMeshComponent> HandPoint;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	TObjectPtr<class USceneComponent> TestCompo;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
+	float GrabDistance = 1.8f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	 TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
 	
-	class ABSItemObjBase* HoldingItem;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	class USceneComponent* ArmTarget;
+	
+	// class ABSItemObjBase* HoldingItem;
 	class AActor* OwningPawn;
+
+	ABSArmComponent_C* ReverseArmComponent;
 	
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")

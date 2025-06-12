@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BSArmComponent.h"
 #include "UObject/Interface.h"
 #include "IBSArmUSE.generated.h"
 
@@ -20,7 +19,9 @@ class UIBSArmUSE : public UInterface
 class BLADEXIIBASH_API IIBSArmUSE
 {
 	GENERATED_BODY()
-
-	ABSArmComponent_C* UseArm(AActor* Caller);
+	
+protected:
+	UFUNCTION(Blueprintable,BlueprintNativeEvent)
+	class ABSArmComponent_C* UseArm(AActor* Caller);
 public:
 };

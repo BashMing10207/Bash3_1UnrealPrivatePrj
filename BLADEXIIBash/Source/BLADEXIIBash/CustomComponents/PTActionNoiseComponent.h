@@ -9,7 +9,7 @@
  * 
  */
 UCLASS()
-class PT_API UPTActionNoiseComponent : public UObject
+class BLADEXIIBASH_API UPTActionNoiseComponent : public UObject
 {
 	GENERATED_BODY()
 

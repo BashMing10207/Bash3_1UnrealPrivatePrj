@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "BS_BaseChar.h"
+#include "Enum/ArmInputType.h"
+#include "Interface/IUsingArmType.h"
 #include "BS_PlayerChar.generated.h"
-
 /**
  * 
  */
 UCLASS()
-class BLADEXIIBASH_API ABS_PlayerChar : public ABS_BaseChar
+class BLADEXIIBASH_API ABS_PlayerChar : public ABS_BaseChar, public IIUsingArmType
 {
 	GENERATED_BODY()
 	ABS_PlayerChar();
@@ -30,20 +31,27 @@ protected:
 
 	virtual void Crouch(bool isCrouch) override;
 
+	
+	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	virtual uint8 GetUsingArm_Implementation() override;
 	
 	void Move(const struct FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void JumpPressed(const FInputActionValue& Value);
 	void JumpReleased(const FInputActionValue& Value);
+
+	void LMouseClicked(const FInputActionValue& Value);
+	void RMouseClicked(const FInputActionValue& Value);
+
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 
-	
-	protected:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	class UInputMappingContext* DefaultMappingContext;
 
@@ -57,6 +65,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* JumpAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* LeftMouse;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* RightMouse;
 	// …기존 코드 위쪽…
 
 protected:
@@ -103,5 +115,12 @@ protected:
 	bool bCanJump = false;
 	bool bIsGround = false;
 
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<ABSArmComponent_C*> ArmArray;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	EArmInputType CurrentArmInputType;
+	
 };
+

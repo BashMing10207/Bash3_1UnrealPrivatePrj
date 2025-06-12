@@ -83,7 +83,24 @@ void ABS_PlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		// JumpAction (Started/Completed)
 		EIC->BindAction(JumpAction, ETriggerEvent::Started,   this, &ABS_PlayerChar::JumpPressed);
 		EIC->BindAction(JumpAction, ETriggerEvent::Completed, this, &ABS_PlayerChar::JumpReleased);
+
+		EIC->BindAction(LeftMouse, ETriggerEvent::Started, this, &ABS_PlayerChar::LMouseClicked);
+		EIC->BindAction(RightMouse, ETriggerEvent::Started, this, &ABS_PlayerChar::RMouseClicked);
 	}
+}
+void ABS_PlayerChar::LMouseClicked(const FInputActionValue& Value)
+{
+	
+	IIBSArmUSE::Execute_UseArm(ArmComponents[1],this);
+}
+void ABS_PlayerChar::RMouseClicked(const FInputActionValue& Value)
+{
+	
+	IIBSArmUSE::Execute_UseArm(ArmComponents[0],this);
+}
+uint8 ABS_PlayerChar::GetUsingArm_Implementation()
+{
+	return (uint8)CurrentArmInputType;
 }
 
 void ABS_PlayerChar::Move(const FInputActionValue& Value)

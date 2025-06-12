@@ -3,6 +3,8 @@
 
 #include "BSArmComponent.h"
 
+#include "Enum/ArmInputType.h"
+#include "Item/BSItemObjBase.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 // Sets default values
@@ -12,13 +14,15 @@ ABSArmComponent_C::ABSArmComponent_C()
 	PrimaryActorTick.bCanEverTick = true;
 	TestCompo = CreateDefaultSubobject<USceneComponent>("TestCompo");
 	RootComponent = TestCompo;
-	HandPoint = CreateDefaultSubobject<UStaticMeshComponent>("HandPoint");
-	BodyJoint = CreateDefaultSubobject<UPhysicsConstraintComponent>("BodyJoint");
-	//RootComponent = BodyJoint;
-	BodyJoint->SetupAttachment(TestCompo);
-	HandPoint->SetupAttachment(BodyJoint);
+	// HandPoint = CreateDefaultSubobject<UStaticMeshComponent>("HandPoint");
+	// BodyJoint = CreateDefaultSubobject<UPhysicsConstraintComponent>("BodyJoint");
+	// //RootComponent = BodyJoint;
+	// BodyJoint->SetupAttachment(TestCompo);
+	// HandPoint->SetupAttachment(BodyJoint);
 	
-	
+	ArmTarget = CreateDefaultSubobject<USceneComponent>("ArmTarget");
+
+	ArmTarget->SetupAttachment(RootComponent);
 	
 }	
 
@@ -29,7 +33,7 @@ void ABSArmComponent_C::BeginPlay()
 	
 
 	
-	BodyJoint->UpdateConstraintFrames();	
+	//BodyJoint->UpdateConstraintFrames();	
 }
 
 // Called every frame
@@ -63,8 +67,8 @@ void ABSArmComponent_C::ApplyHandPosTarget()
 }
 void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo)
 {
-	BodyJoint->SetConstrainedComponents(BodyCompo,NAME_None,HandPoint,
-	NAME_None);
+	// BodyJoint->SetConstrainedComponents(BodyCompo,NAME_None,HandPoint,
+	// NAME_None);
 	// Frame1: HandPoint 기준(로컬)
 	// A) 컴포넌트 연결
 	// BodyJoint->SetConstrainedComponents(
@@ -88,7 +92,7 @@ void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo)
 	// 	EConstraintFrame::Frame2,
 	// 	Frame2
 	// );
-	BodyJoint->UpdateConstraintFrames();
+	//BodyJoint->UpdateConstraintFrames();
 
 	OwningPawn = (BodyCompo->GetOwner());
 }
@@ -96,4 +100,101 @@ void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo,FName BOne
 {
 	//BodyJoint->SetConstrainedComponents(HandPoint,NAME_None,BodyCompo,
 	//BOneName);
+}
+
+void ABSArmComponent_C::SetHoldingItem(ABSItemObjBase* ItemB)
+{
+	HoldingItem = ItemB;
+}
+
+
+void ABSArmComponent_C::GrabArm(AActor* Caller)
+{
+
+	GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,"Hit.GetActor()->GetName()");
+				
+	FVector Start = GetActorTransform().GetLocation();
+	FVector End = GetActorTransform().GetLocation() + GetActorForwardVector()*GrabDistance;
+	
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);           // 자기 자신 무시
+	Params.AddIgnoredActor(OwningPawn);
+	if (!!ReverseArmComponent)
+		Params.AddIgnoredActor(ReverseArmComponent);
+	Params.bTraceComplex = true;            // 정밀 충돌 검사
+	Params.bReturnPhysicalMaterial = false;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		Hit,
+		Start,
+		End,
+		ECC_Visibility,     // 사용할 채널
+		Params
+	);
+
+	if (bHit)
+	{
+		if (!!Hit.GetActor())
+		{
+			IIBSInteractiveable* TargetItem = Cast<IIBSInteractiveable>(Hit.GetActor());
+			if (TargetItem != nullptr)
+			{
+				GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,Hit.GetActor()->GetName());
+				HoldingItem = IIBSInteractiveable::Execute_DOInteractive(Hit.GetActor(),this,OwningPawn);
+
+				if (!!HoldingItem)
+				HoldingItem->AttachToComponent(ArmTarget,FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			}
+		}
+
+	}
+}
+
+
+class ABSArmComponent_C* ABSArmComponent_C::UseArm_Implementation(AActor* Caller)
+{
+	// if (HoldingItem == nullptr)
+	{
+		if (!!Cast<IIUsingArmType>(Caller))
+		{
+			EArmInputType ArmType = (EArmInputType)IIUsingArmType::Execute_GetUsingArm(Caller);
+			NoItemUseArm(Caller);
+
+			switch (ArmType)
+			{
+			case EArmInputType::AttackUse:
+			
+				break;
+			case EArmInputType::Grab:
+				
+				if (HoldingItem != nullptr)
+				{
+					IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
+					HoldingItem = nullptr;
+				}
+				else
+				{
+					GrabArm(Caller);
+				}
+			
+				break;
+			case EArmInputType::Block:
+			
+				break;
+			case EArmInputType::Reload:
+			
+				break;
+			}
+		
+		}
+		else
+		{
+			IIBSHoldingInteractiveable::Execute_UseItemObj(HoldingItem,this,OwningPawn);
+		}
+	}
+		
+	
+	
+	return this;
 }
