@@ -73,11 +73,11 @@ protected:
 
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
-	class UCameraComponent* CameraComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
-	class USpringArmComponent* SpringArmCompo;
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
+	// class UCameraComponent* CameraComp;
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Cam")
+	// class USpringArmComponent* SpringArmCompo;
 	
 	UPROPERTY(EditAnywhere, Category="Movement|Physics")
 	float MaxSpeed = 600.f;
@@ -107,12 +107,14 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
 	TArray<class ABSArmComponent_C*> ArmComponents;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
-	class UStaticMeshComponent* TempArmTarget1;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
-	class UStaticMeshComponent* TempArmTarget2;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	// class UStaticMeshComponent* TempArmTarget1;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	// class UStaticMeshComponent* TempArmTarget2;
 	// 상태 플래그
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bCanJump = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bIsGround = false;
 
 public:

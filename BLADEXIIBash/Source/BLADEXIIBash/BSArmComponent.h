@@ -55,6 +55,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsRight = true;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
+	class USceneComponent* ArmTarget;
 protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;
@@ -70,8 +72,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	 TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
-	class USceneComponent* ArmTarget;
+	
 	
 	// class ABSItemObjBase* HoldingItem;
 	class AActor* OwningPawn;

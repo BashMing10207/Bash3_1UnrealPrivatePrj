@@ -15,18 +15,18 @@
 
 ABS_PlayerChar::ABS_PlayerChar()
 {
-	SpringArmCompo = CreateDefaultSubobject<USpringArmComponent>("SpringArmCOmpo");
-	SpringArmCompo->SetupAttachment(RootComponent);
-	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-	CameraComp->SetupAttachment(SpringArmCompo);
+	// SpringArmCompo = CreateDefaultSubobject<USpringArmComponent>("SpringArmCOmpo");
+	// SpringArmCompo->SetupAttachment(RootComponent);
+	// CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	// CameraComp->SetupAttachment(SpringArmCompo);
 
 	
 	
 	
-	TempArmTarget1 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget1");
-	TempArmTarget1->SetupAttachment(CameraComp);
-	TempArmTarget2 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget2");
-	TempArmTarget2->SetupAttachment(CameraComp);
+	// TempArmTarget1 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget1");
+	// TempArmTarget1->SetupAttachment(CameraComp);
+	// TempArmTarget2 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget2");
+	// TempArmTarget2->SetupAttachment(CameraComp);
 }
 
 void ABS_PlayerChar::BeginPlay()
@@ -215,10 +215,10 @@ void ABS_PlayerChar::Tick(float DeltaTime)
 	// for (int i = 0; i < ArmComponents.Num(); i++)
 	// {
 	//if (ArmComponents.Num() > 0)
-	{
-		ArmComponents[0]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget1->GetComponentTransform());
-		ArmComponents[1]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget2->GetComponentTransform());
-	}
+	// {
+	// 	ArmComponents[0]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget1->GetComponentTransform());
+	// 	ArmComponents[1]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget2->GetComponentTransform());
+	// }
 	//}
 
 }
