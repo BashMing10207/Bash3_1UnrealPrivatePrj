@@ -26,7 +26,7 @@ ABSArmComponent_C::ABSArmComponent_C()
 	
 	ArmTarget = CreateDefaultSubobject<USceneComponent>("ArmTarget");
 
-	ArmTarget->SetupAttachment(SprArmCompo.Get());
+	ArmTarget->SetupAttachment(SprArmCompo);
 
 	
 }	

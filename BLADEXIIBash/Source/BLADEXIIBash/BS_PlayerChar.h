@@ -41,7 +41,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void JumpPressed(const FInputActionValue& Value);
 	void JumpReleased(const FInputActionValue& Value);
-
+	
 	void LMouseClicked(const FInputActionValue& Value);
 	void RMouseClicked(const FInputActionValue& Value);
 
@@ -50,6 +50,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+// public:
+// 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Stat")
+// 	float 
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")

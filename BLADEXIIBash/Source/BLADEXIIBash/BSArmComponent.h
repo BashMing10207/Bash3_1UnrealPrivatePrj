@@ -62,7 +62,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
 	USceneComponent* InteractivePivot;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
-	TSoftObjectPtr<USpringArmComponent> SprArmCompo;
+	TObjectPtr<USpringArmComponent> SprArmCompo;
 protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;

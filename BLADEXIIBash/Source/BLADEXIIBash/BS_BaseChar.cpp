@@ -4,6 +4,7 @@
 #include "BS_BaseChar.h"
 
 #include "Components/CapsuleComponent.h"
+#include "CustomComponents/BSCharacterStatComponent.h"
 
 
 // Sets default values
@@ -15,6 +16,9 @@ ABS_BaseChar::ABS_BaseChar()
 	BaseBodyCompo = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BaseBodyCompo"));
 
 	RootComponent = BaseBodyCompo;
+
+	StatComponent = CreateDefaultSubobject<UBSCharacterStatComponent>(TEXT("StatComponent"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -69,3 +73,16 @@ void ABS_BaseChar::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	InputCompo = PlayerInputComponent;
 }
 
+float ABS_BaseChar::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage , DamageEvent , EventInstigator , DamageCauser);
+	
+	StatComponent->ApplyDamage(Damage);
+
+	return Damage;
+}
+int32 ABS_BaseChar::GetLevel()
+{
+	return StatComponent->GetCurrentLevel();
+}
