@@ -9,6 +9,8 @@
 
 #include "BSArmComponent.generated.h"
 
+class USpringArmComponent;
+
 UCLASS(Blueprintable,BlueprintType,meta=(BlueprintSpawnableComponent))
 class BLADEXIIBASH_API ABSArmComponent_C : public AActor, public IIBSArmUSE
 {
@@ -57,6 +59,10 @@ public:
 	bool bIsRight = true;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
 	class USceneComponent* ArmTarget;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
+	USceneComponent* InteractivePivot;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
+	TSoftObjectPtr<USpringArmComponent> SprArmCompo;
 protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;
@@ -72,8 +78,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	 TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
 	
-	
-	
+
 	// class ABSItemObjBase* HoldingItem;
 	class AActor* OwningPawn;
 

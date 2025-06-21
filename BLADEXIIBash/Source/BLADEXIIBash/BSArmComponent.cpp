@@ -4,8 +4,10 @@
 #include "BSArmComponent.h"
 
 #include "Enum/ArmInputType.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Item/BSItemObjBase.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 ABSArmComponent_C::ABSArmComponent_C()
@@ -19,10 +21,13 @@ ABSArmComponent_C::ABSArmComponent_C()
 	// //RootComponent = BodyJoint;
 	// BodyJoint->SetupAttachment(TestCompo);
 	// HandPoint->SetupAttachment(BodyJoint);
+
+	SprArmCompo = CreateDefaultSubobject<USpringArmComponent>("springArmCompo");
 	
 	ArmTarget = CreateDefaultSubobject<USceneComponent>("ArmTarget");
 
-	ArmTarget->SetupAttachment(RootComponent);
+	ArmTarget->SetupAttachment(SprArmCompo.Get());
+
 	
 }	
 
@@ -112,9 +117,17 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 {
 
 	GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,"Hit.GetActor()->GetName()");
-				
+
+	
 	FVector Start = GetActorTransform().GetLocation();
 	FVector End = GetActorTransform().GetLocation() + GetActorForwardVector()*GrabDistance;
+
+	if (!!InteractivePivot)
+	{
+		Start = InteractivePivot->GetComponentLocation();
+		End = InteractivePivot->GetComponentLocation() + InteractivePivot->GetForwardVector()*GrabDistance;
+	
+	}
 	
 	FHitResult Hit;
 	FCollisionQueryParams Params;

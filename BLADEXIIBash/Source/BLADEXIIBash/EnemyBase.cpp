@@ -3,12 +3,16 @@
 
 #include "EnemyBase.h"
 
+#include "CustomComponents/BSBashMovement.h"
+#include "CustomComponents/CustomAI/PTBashAI.h"
+
 // Sets default values
 AEnemyBase::AEnemyBase()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	//PrimaryActorTick.bCanEverTick = true;
+	PathFinder = CreateDefaultSubobject<UPTBashAI>(TEXT("PathFinder"));
+	//MovementCompo = CreateDefaultSubobject<UBSBashMovement>("MovementCOmpo");
 }
 
 // Called when the game starts or when spawned
@@ -29,6 +33,7 @@ void AEnemyBase::Tick(float DeltaTime)
 void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 }
+
 

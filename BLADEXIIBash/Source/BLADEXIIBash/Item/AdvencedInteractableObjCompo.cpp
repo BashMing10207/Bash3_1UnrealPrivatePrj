@@ -18,16 +18,7 @@
 UAdvencedInteractableObjCompo::UAdvencedInteractableObjCompo()
 {
 	//COllsionSOund BInd
-	ConstructorHelpers::FObjectFinder<USoundCue> CollisionSOundCUeRef(TEXT("/Game/SFX/Collision/VineBoom_Cue.VineBoom_Cue"));
-	if (CollisionSOundCUeRef.Succeeded())
-	{
-		CollisionSoundCue = CollisionSOundCUeRef.Object;
-	}
-	ConstructorHelpers::FObjectFinder<USoundAttenuation> CollisionSOundAttenuation(TEXT("/Game/SFX/Collision/SA_Collide.SA_Collide"));
-	if (CollisionSOundAttenuation.Succeeded())
-	{
-		CollisionSoundAttenuatiom = CollisionSOundAttenuation.Object;
-	}
+	
 	
 }
 

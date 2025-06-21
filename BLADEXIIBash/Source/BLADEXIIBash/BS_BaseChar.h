@@ -38,10 +38,12 @@ public:
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-protected:
-
+public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<class UCapsuleComponent> BaseBodyCompo;
+protected:
+
+
 	// UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	// TObjectPtr<class UCapsuleComponent> BaseBodyCompo;
 
