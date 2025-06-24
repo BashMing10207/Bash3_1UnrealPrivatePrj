@@ -8,6 +8,7 @@
 #include "Item/BSItemObjBase.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Item/BSItemHolder.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values
@@ -37,7 +38,7 @@ void ABSArmComponent_C::BeginPlay()
 {
 	Super::BeginPlay();
 	PhysArmCompo->GrabComponent(ArmTarget,NAME_None,ArmTarget->GetComponentLocation(),true);
-	
+
 
 	//BodyJoint->UpdateConstraintFrames();	
 }
@@ -106,6 +107,7 @@ void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo)
 	//BodyJoint->UpdateConstraintFrames();
 
 	OwningPawn = (BodyCompo->GetOwner());
+	OwningChar = Cast<ABS_BaseChar>(OwningPawn);
 }
 void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo,FName BOneName)
 {
@@ -124,7 +126,13 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 
 	//GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,"Hit.GetActor()->GetName()");
 
-	
+	ABSItemObjBase* TempItemPtr = HoldingItem;
+	// if (!!HoldingItem)
+	// {
+	// 	IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
+	// 	HoldingItem = nullptr;
+	// }
+		
 	FVector Start = GetActorTransform().GetLocation();
 	FVector End = GetActorTransform().GetLocation() + GetActorForwardVector()*GrabDistance;
 
@@ -139,6 +147,7 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);           // 자기 자신 무시
 	Params.AddIgnoredActor(OwningPawn);
+	
 	if (!!ReverseArmComponent)
 		Params.AddIgnoredActor(ReverseArmComponent);
 	Params.bTraceComplex = true;            // 정밀 충돌 검사
@@ -159,9 +168,12 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 			IIBSInteractiveable* TargetItem = Cast<IIBSInteractiveable>(Hit.GetActor());
 			if (TargetItem != nullptr)
 			{
+				
+				
 				GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,Hit.GetActor()->GetName());
 				HoldingItem = IIBSInteractiveable::Execute_DOInteractive(Hit.GetActor(),this,OwningPawn);
-
+				
+				
 				if (!!HoldingItem)
 				{
 					HoldingItem->AttachToComponent(ArmTarget,FAttachmentTransformRules::SnapToTargetNotIncludingScale
@@ -174,21 +186,29 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 						
 						HoldingItem->GetMeshComponent()->SetRelativeLocation(-Delta.GetLocation());
 						HoldingItem->GetMeshComponent()->SetRelativeRotation(Delta.GetRotation().Inverse());
-
-
-						
 					}
 					else
 					{
 						
 					}
 				}
+				else
+				{
+					
+				}
 			}
 		}
 
 	}
 }
-
+void ABSArmComponent_C::DropItem()
+{
+	if (HoldingItem != nullptr)
+	{
+		IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
+		HoldingItem = nullptr;
+	}
+}
 
 class ABSArmComponent_C* ABSArmComponent_C::UseArm_Implementation(AActor* Caller)
 {
@@ -215,16 +235,24 @@ class ABSArmComponent_C* ABSArmComponent_C::UseArm_Implementation(AActor* Caller
 				// }
 				break;
 			case EArmInputType::Grab:
-				
-				if (HoldingItem != nullptr)
-				{
-					IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
-					HoldingItem = nullptr;
-				}
-				else
+
+				if (OwningChar->bIsInventory)
 				{
 					GrabArm(Caller);
 				}
+				else
+				{
+					if (HoldingItem != nullptr)
+					{
+						IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
+						HoldingItem = nullptr;
+					}
+					else
+					{
+						GrabArm(Caller);
+					}
+				}
+
 			
 				break;
 			case EArmInputType::Block:

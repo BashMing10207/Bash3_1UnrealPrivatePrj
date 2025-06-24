@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BS_BaseChar.h"
 #include "GameFramework/Actor.h"
 #include "Interface/IBSArmUSE.h"
 #include "Interface/IUsingArmType.h"
@@ -52,10 +53,14 @@ public:
 	void NoItemUseArm(AActor* Caller);
 
 	void GrabArm(AActor* Caller);
+
+
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ABSItemObjBase* HoldingItem;
 
+	void DropItem();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsRight = true;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
@@ -84,6 +89,7 @@ protected:
 
 	// class ABSItemObjBase* HoldingItem;
 	class AActor* OwningPawn;
+	ABS_BaseChar* OwningChar;
 
 	ABSArmComponent_C* ReverseArmComponent;
 	
@@ -94,5 +100,7 @@ protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UBoxComponent> Box;
 };
+
+
 
 

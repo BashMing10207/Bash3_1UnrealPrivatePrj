@@ -28,6 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	ABSItemObjBase* ItemHolderInteractive(class ABSItemHolder* Holder,bool HoldOn);
+	
 public:
 UMeshComponent* GetMeshComponent()
 {
@@ -50,12 +52,14 @@ protected:
 	virtual void BeAttach(bool isAttach);
 	
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UMeshComponent> MeshCompo;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UAdvencedInteractableObjCompo> InteractableObjCompo;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class ABSArmComponent_C> HoldingArm;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class ABSItemHolder> ItemHolder;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UAnimMontage> UseItemAnim;
@@ -63,6 +67,10 @@ protected:
 	TObjectPtr<class UAnimMontage> AltUseItemAnim;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UAnimMontage> ReleaseItemAnim;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanHold = true;
 };
 
 

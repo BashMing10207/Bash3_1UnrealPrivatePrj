@@ -72,6 +72,7 @@ void ABS_PlayerChar::Crouch(bool isCrouch)
 		{
 			bIsRealCrouching = true;
 			CapsuleComponent->SetCapsuleHalfHeight(PlayerHeight/4);
+			MaxSpeedModifi = 0.25f;
 			CrouchNative(true);
 		}
 	}
@@ -88,7 +89,6 @@ void ABS_PlayerChar::Crouch(bool isCrouch)
 			Params.AddIgnoredActor(this);
 			Params.AddIgnoredActor(ArmComponents[0]);
 			Params.AddIgnoredActor(ArmComponents[1]);
-			// 단단한 판정 → 완전 접지 여부
 			if (!(GetWorld()->SweepSingleByChannel(
 				Hit,
 				ActorLoc,
@@ -103,6 +103,7 @@ void ABS_PlayerChar::Crouch(bool isCrouch)
 				bIsRealCrouching = false;
 				CapsuleComponent->SetCapsuleHalfHeight(PlayerHeight/2);
 				CrouchNative(false);
+				MaxSpeedModifi = 1.f;
 			}
 
 		}
@@ -248,6 +249,11 @@ void ABS_PlayerChar::Movement(float DeltaTIme)
 		FVector Projected = FVector::VectorPlaneProject(Input3D_World, Hit.Normal.GetSafeNormal());
 		Input3D_World = Projected;
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ( FString::Printf(TEXT("$x %f y %f z %f"),Hit.Normal.X,Hit.Normal.Y,Hit.Normal.Z)));
+		MaxSpeedModifiModif = 1.f;
+	}
+	else
+	{
+		MaxSpeedModifiModif = 0.4f;
 	}
 
    
@@ -260,7 +266,7 @@ void ABS_PlayerChar::Movement(float DeltaTIme)
 
     // --- 6) Lerp 계수 계산 및 movDir 생성 ---
     float CombinedMag = (ProjOnVel + Input3D_World).Size();  
-    float Factor      = FMath::Clamp(FMath::Lerp(1.f, 0.f, CombinedMag / MaxSpeed),0,1);  
+    float Factor      = FMath::Clamp(FMath::Lerp(1.f, 0.f, CombinedMag / MaxSpeed/MaxSpeedModifi/MaxSpeedModifiModif),0,1);  
     FVector DeltaVel  = Input3D_World * Factor * Acceleration;  
 	BaseBodyCompo->AddImpulse(DeltaVel,NAME_None,true);
     // --- 7) 최종 속도에 더해주기 (RigidBody.velocity += movDir) ---

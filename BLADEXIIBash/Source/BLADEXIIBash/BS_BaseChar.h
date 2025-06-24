@@ -46,6 +46,8 @@ public:
 public:	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<class UCapsuleComponent> BaseBodyCompo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsInventory = false;
 protected:
 
 

@@ -99,6 +99,11 @@ protected:
 	float Acceleration = 2000.f;
 
 	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float MaxSpeedModifi = 1.f;
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
+	float MaxSpeedModifiModif = 1.f;
+	
+	UPROPERTY(EditAnywhere, Category="Movement|Physics")
 	float JumpImpulse = 350.f;
 
 	UPROPERTY(EditAnywhere, Category="Movement|Physics")

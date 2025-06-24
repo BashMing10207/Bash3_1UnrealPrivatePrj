@@ -3,6 +3,7 @@
 
 #include "Item/BSItemObjBase.h"
 #include "AdvencedInteractableObjCompo.h"
+#include "BSItemHolder.h"
 #include "BS_BaseChar.h"
 
 // Sets default values
@@ -42,12 +43,36 @@ void ABSItemObjBase::Tick(float DeltaTime)
 
 }
 
+ABSItemObjBase* ABSItemObjBase::ItemHolderInteractive(ABSItemHolder* Holder,bool HoldOn)
+{
+	if (HoldOn)
+	{
+		ItemHolder = Holder;
+		BeAttach(true);
+	}
+	else
+	{
+		ItemHolder = nullptr;
+		BeAttach(false);
+	}
+
+	return this;
+	
+}
+
 ABSItemObjBase* ABSItemObjBase::DOInteractive_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
 if (UsingArm == nullptr)
 	return nullptr;
 if (HoldingArm != nullptr)
 	return nullptr;
+if (!bCanHold)
+	return nullptr;
+if (ItemHolder != nullptr)
+{
+	ItemHolder->DropItem();
+	ItemHolder->HoldItem(nullptr);
+}
 	
 	HoldingArm = UsingArm;
 	BeAttach(true);
