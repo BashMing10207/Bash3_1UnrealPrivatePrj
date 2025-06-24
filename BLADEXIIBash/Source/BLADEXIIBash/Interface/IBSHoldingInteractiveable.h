@@ -29,5 +29,13 @@ public:
 	ABSItemObjBase* ALTUseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
 	UFUNCTION(BlueprintNativeEvent, Blueprintable)
 	ABSItemObjBase* ReleaseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	ABSItemObjBase* ReloadItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	ABSItemObjBase* RealUseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	ABSItemObjBase* RealAltUseItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
+	UFUNCTION(BlueprintNativeEvent, Blueprintable)
+	ABSItemObjBase* RealReloadItemObj(ABSArmComponent_C* UsingArm, AActor* Caller);
 	
 };

@@ -31,7 +31,8 @@ protected:
 
 	virtual void Crouch(bool isCrouch) override;
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+	void CrouchNative(bool bIsCrouch);
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -45,6 +46,10 @@ protected:
 	void LMouseClicked(const FInputActionValue& Value);
 	void RMouseClicked(const FInputActionValue& Value);
 
+	void CrouchStart(const FInputActionValue& Value);
+	void CrouchEnd(const FInputActionValue& Value);
+
+	void DashInput(const FInputActionValue& Value);
 	
 public:	
 	// Called every frame
@@ -72,6 +77,11 @@ protected:
 	UInputAction* LeftMouse;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* RightMouse;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* CrouchInput;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* SprintInput;
 	// …기존 코드 위쪽…
 
 protected:
@@ -119,6 +129,13 @@ protected:
 	bool bCanJump = false;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool bIsGround = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool bIsCrouching = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool bIsRealCrouching = false;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -126,6 +143,7 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	EArmInputType CurrentArmInputType;
+	
 	
 };
 

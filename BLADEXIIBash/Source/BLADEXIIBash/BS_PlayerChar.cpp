@@ -19,8 +19,6 @@ ABS_PlayerChar::ABS_PlayerChar()
 	// SpringArmCompo->SetupAttachment(RootComponent);
 	// CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	// CameraComp->SetupAttachment(SpringArmCompo);
-
-	
 	
 	
 	// TempArmTarget1 = CreateDefaultSubobject<UStaticMeshComponent>("TempArmTarget1");
@@ -67,6 +65,49 @@ void ABS_PlayerChar::Jump()
 void ABS_PlayerChar::Crouch(bool isCrouch)
 {
 	Super::Crouch(isCrouch);
+
+	if (bIsCrouching)
+	{
+		if (!bIsRealCrouching)
+		{
+			bIsRealCrouching = true;
+			CapsuleComponent->SetCapsuleHalfHeight(PlayerHeight/4);
+			CrouchNative(true);
+		}
+	}
+	else
+	{
+		if (bIsRealCrouching)
+		{
+			FHitResult Hit;
+			const FVector ActorLoc     = GetActorLocation();
+			const FVector SphereCenter = ActorLoc + FVector(0, 0, CapsuleComponent->GetScaledCapsuleHalfHeight()*2);
+			const FCollisionShape Sphere = FCollisionShape::MakeSphere(CapsuleComponent->GetScaledCapsuleRadius());
+			FCollisionQueryParams Params;
+	
+			Params.AddIgnoredActor(this);
+			Params.AddIgnoredActor(ArmComponents[0]);
+			Params.AddIgnoredActor(ArmComponents[1]);
+			// 단단한 판정 → 완전 접지 여부
+			if (!(GetWorld()->SweepSingleByChannel(
+				Hit,
+				ActorLoc,
+			   SphereCenter,
+				FQuat::Identity,
+				GroundChannel,
+        
+				Sphere,
+				Params
+			)))
+			{
+				bIsRealCrouching = false;
+				CapsuleComponent->SetCapsuleHalfHeight(PlayerHeight/2);
+				CrouchNative(false);
+			}
+
+		}
+	}
+	
 }
 
 void ABS_PlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -86,6 +127,12 @@ void ABS_PlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EIC->BindAction(LeftMouse, ETriggerEvent::Started, this, &ABS_PlayerChar::LMouseClicked);
 		EIC->BindAction(RightMouse, ETriggerEvent::Started, this, &ABS_PlayerChar::RMouseClicked);
+
+		EIC->BindAction(CrouchInput, ETriggerEvent::Started, this, &ABS_PlayerChar::CrouchStart);
+		EIC->BindAction(CrouchInput, ETriggerEvent::Completed, this, &ABS_PlayerChar::CrouchEnd);
+
+		EIC->BindAction(SprintInput, ETriggerEvent::Started, this, &ABS_PlayerChar::DashInput);
+		
 	}
 }
 void ABS_PlayerChar::LMouseClicked(const FInputActionValue& Value)
@@ -98,6 +145,20 @@ void ABS_PlayerChar::RMouseClicked(const FInputActionValue& Value)
 	
 	IIBSArmUSE::Execute_UseArm(ArmComponents[0],this);
 }
+void ABS_PlayerChar::CrouchStart(const FInputActionValue& Value)
+{
+	bIsCrouching = true;
+}
+void ABS_PlayerChar::CrouchEnd(const FInputActionValue& Value)
+{
+	bIsCrouching = false;
+}
+
+void ABS_PlayerChar::DashInput(const FInputActionValue& Value)
+{
+	
+}
+
 uint8 ABS_PlayerChar::GetUsingArm_Implementation()
 {
 	return (uint8)CurrentArmInputType;
@@ -199,7 +260,7 @@ void ABS_PlayerChar::Movement(float DeltaTIme)
 
     // --- 6) Lerp 계수 계산 및 movDir 생성 ---
     float CombinedMag = (ProjOnVel + Input3D_World).Size();  
-    float Factor      = FMath::Clamp( FMath::Lerp(1.f, 0.f, CombinedMag / MaxSpeed),0,1);  
+    float Factor      = FMath::Clamp(FMath::Lerp(1.f, 0.f, CombinedMag / MaxSpeed),0,1);  
     FVector DeltaVel  = Input3D_World * Factor * Acceleration;  
 	BaseBodyCompo->AddImpulse(DeltaVel,NAME_None,true);
     // --- 7) 최종 속도에 더해주기 (RigidBody.velocity += movDir) ---
@@ -210,15 +271,18 @@ void ABS_PlayerChar::Movement(float DeltaTIme)
 void ABS_PlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	Crouch(true);
+	
 	//Movement(DeltaTime);
 
-	// for (int i = 0; i < ArmComponents.Num(); i++)
-	// {
-	//if (ArmComponents.Num() > 0)
-	// {
-	// 	ArmComponents[0]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget1->GetComponentTransform());
-	// 	ArmComponents[1]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget2->GetComponentTransform());
+	//  for (int i = 0; i < ArmComponents.Num(); i++)
+	//  {
+	// if (ArmComponents.Num() > 0)
+	//  {
+	//  	ArmComponents[0]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget1->GetComponentTransform());
+	//  	ArmComponents[1]->SetHandPosTarget(BaseBodyCompo->GetComponentTransform(),TempArmTarget2->GetComponentTransform());
+	//  }
 	// }
-	//}
 
 }

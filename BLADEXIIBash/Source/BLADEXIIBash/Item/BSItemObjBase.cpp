@@ -3,6 +3,7 @@
 
 #include "Item/BSItemObjBase.h"
 #include "AdvencedInteractableObjCompo.h"
+#include "BS_BaseChar.h"
 
 // Sets default values
 ABSItemObjBase::ABSItemObjBase()
@@ -58,17 +59,48 @@ if (HoldingArm != nullptr)
 
 ABSItemObjBase* ABSItemObjBase::UseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(UseItemAnim);
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection()
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),UseItemAnim);
 	return this;
 }
 
 ABSItemObjBase* ABSItemObjBase::ALTUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
+	
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(AltUseItemAnim,
+	// UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(AltUseItemAnim);
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),AltUseItemAnim);
+
 	return this;
 }
 
 ABSItemObjBase* ABSItemObjBase::ReleaseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(ReleaseItemAnim,
+	//UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(ReleaseItemAnim);
+	// (ReleaseItemAnim,
+	// FName(TEXT("Default")),0.1f,0.1f,1,1);
+	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+			UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),ReleaseItemAnim);
+
 	BeAttach(false);
+	
+	return this;
+}
+
+ABSItemObjBase* ABSItemObjBase::RealUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
+	
+	return this;
+}
+
+ABSItemObjBase* ABSItemObjBase::RealAltUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
+{
 	
 	return this;
 }
@@ -79,6 +111,7 @@ void ABSItemObjBase::BeAttach(bool isAttach)
 	{
 		MeshCompo->SetSimulatePhysics(false);
 		MeshCompo->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		
 	}
 	else
 	{

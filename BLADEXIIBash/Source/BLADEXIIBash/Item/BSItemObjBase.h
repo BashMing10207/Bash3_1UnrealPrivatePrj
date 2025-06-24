@@ -29,7 +29,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-
+UMeshComponent* GetMeshComponent()
+{
+	return MeshCompo;
+}
 protected:	
 	virtual class ABSItemObjBase* DOInteractive_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller) override;
 
@@ -40,7 +43,10 @@ protected:
 
 	virtual ABSItemObjBase* ReleaseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller) override;
 	
+	virtual ABSItemObjBase* RealUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller) override;
 
+	virtual ABSItemObjBase* RealAltUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller) override;
+	
 	virtual void BeAttach(bool isAttach);
 	
 protected:
@@ -50,6 +56,13 @@ protected:
 	TObjectPtr<class UAdvencedInteractableObjCompo> InteractableObjCompo;
 
 	TObjectPtr<class ABSArmComponent_C> HoldingArm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UAnimMontage> UseItemAnim;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UAnimMontage> AltUseItemAnim;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UAnimMontage> ReleaseItemAnim;
 };
 
 

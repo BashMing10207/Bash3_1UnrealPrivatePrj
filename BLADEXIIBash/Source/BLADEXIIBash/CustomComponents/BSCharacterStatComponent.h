@@ -36,6 +36,10 @@ public:
 	
 	FORCEINLINE float GetCurrentLevel() { return CurrentLevel; }
 	FORCEINLINE float GetCurrentHp() { return CurrentHp; }
+	float GetCurrentStemina() { return CurrentStemina; }
+	float GetCurrentHunger() {return CurrentHunger; }
+
+	
 	FORCEINLINE const FBSCharacterStat& GetBaseStat() { return BaseStat; }
 	FORCEINLINE const FBSCharacterStat& GetModifierStat() { return ModifierStat; }
 	FORCEINLINE FBSCharacterStat GetTotalStat() const  { return BaseStat + ModifierStat; }

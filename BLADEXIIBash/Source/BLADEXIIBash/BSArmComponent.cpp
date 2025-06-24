@@ -8,6 +8,7 @@
 #include "Item/BSItemObjBase.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values
 ABSArmComponent_C::ABSArmComponent_C()
@@ -22,22 +23,22 @@ ABSArmComponent_C::ABSArmComponent_C()
 	// BodyJoint->SetupAttachment(TestCompo);
 	// HandPoint->SetupAttachment(BodyJoint);
 
-	SprArmCompo = CreateDefaultSubobject<USpringArmComponent>("springArmCompo");
+	// SprArmCompo = CreateDefaultSubobject<USpringArmComponent>("springArmCompo");
+	//
+	ArmTarget = CreateDefaultSubobject<UStaticMeshComponent>("ArmTarget");
+	ArmTarget->SetupAttachment(TestCompo);
+	// ArmTarget->SetupAttachment(SprArmCompo);
 	
-	ArmTarget = CreateDefaultSubobject<USceneComponent>("ArmTarget");
-
-	ArmTarget->SetupAttachment(SprArmCompo);
-
-	
+	PhysArmCompo = CreateDefaultSubobject<UPhysicsHandleComponent>("PhysArmCompo");
 }	
 
 // Called when the game starts or when spawned
 void ABSArmComponent_C::BeginPlay()
 {
 	Super::BeginPlay();
+	PhysArmCompo->GrabComponent(ArmTarget,NAME_None,ArmTarget->GetComponentLocation(),true);
 	
 
-	
 	//BodyJoint->UpdateConstraintFrames();	
 }
 
@@ -60,6 +61,7 @@ void ABSArmComponent_C::Tick(float DeltaTime)
 
 void ABSArmComponent_C::SetHandPosTarget_Implementation(FTransform BodyPos,FTransform TArgetPos)
 {
+	PhysArmCompo->SetTargetLocationAndRotation(TargetPos.GetLocation(),TArgetPos.GetRotation().Rotator());
 	//TArgetPos.SetScale3D(FVector(1.0f,1.0f,1.0f));
 	// TargetPos= BodyJoint->GetComponentTransform().Inverse() * TArgetPos;
 	// TargetPos.SetLocation(BodyJoint->GetComponentTransform().InverseTransformPosition(TargetPos.GetLocation())*-1);
@@ -69,9 +71,13 @@ void ABSArmComponent_C::ApplyHandPosTarget()
 	// BodyJoint->SetLinearPositionTarget(TargetPos.GetLocation());
 	// BodyJoint->SetAngularOrientationTarget(TargetPos.GetRotation().Rotator());
 	// BodyJoint->UpdateConstraintFrames();
+
 }
 void ABSArmComponent_C::SetUpBodyJoint(UPrimitiveComponent* BodyCompo)
 {
+		// PhysArmCompo->GrabComponent(ArmTarget,NAME_None,ArmTarget->GetComponentLocation(),true);
+		//
+	
 	// BodyJoint->SetConstrainedComponents(BodyCompo,NAME_None,HandPoint,
 	// NAME_None);
 	// Frame1: HandPoint 기준(로컬)
@@ -116,7 +122,7 @@ void ABSArmComponent_C::SetHoldingItem(ABSItemObjBase* ItemB)
 void ABSArmComponent_C::GrabArm(AActor* Caller)
 {
 
-	GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,"Hit.GetActor()->GetName()");
+	//GEngine->AddOnScreenDebugMessage(-1,0.9f,FColor::Red,"Hit.GetActor()->GetName()");
 
 	
 	FVector Start = GetActorTransform().GetLocation();
@@ -157,7 +163,26 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 				HoldingItem = IIBSInteractiveable::Execute_DOInteractive(Hit.GetActor(),this,OwningPawn);
 
 				if (!!HoldingItem)
-				HoldingItem->AttachToComponent(ArmTarget,FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				{
+					HoldingItem->AttachToComponent(ArmTarget,FAttachmentTransformRules::SnapToTargetNotIncludingScale
+						);//,bIsRight ? FName(TEXT("RightHand")):FName(TEXT("LeftHand"))
+					if (HoldingItem->GetMeshComponent()->DoesSocketExist("Pivot"))
+					{
+						FTransform PivotTransform =HoldingItem->GetMeshComponent()->GetSocketTransform("Pivot");
+	 					FTransform Delta = ArmTarget->GetComponentTransform().GetRelativeTransform(PivotTransform);
+						// HoldingItem->SetActorRelativeTransform(PivotTransform * ScaleTrm);
+						
+						HoldingItem->GetMeshComponent()->SetRelativeLocation(-Delta.GetLocation());
+						HoldingItem->GetMeshComponent()->SetRelativeRotation(Delta.GetRotation().Inverse());
+
+
+						
+					}
+					else
+					{
+						
+					}
+				}
 			}
 		}
 
@@ -177,7 +202,17 @@ class ABSArmComponent_C* ABSArmComponent_C::UseArm_Implementation(AActor* Caller
 			switch (ArmType)
 			{
 			case EArmInputType::AttackUse:
-			
+				if (HoldingItem != nullptr)
+				{
+					IIBSHoldingInteractiveable::Execute_UseItemObj(HoldingItem,this,OwningPawn);
+				}
+				// else
+				// {
+				// 	GrabArm(Caller);
+				// }// else
+				// {
+				// 	GrabArm(Caller);
+				// }
 				break;
 			case EArmInputType::Grab:
 				
@@ -193,10 +228,29 @@ class ABSArmComponent_C* ABSArmComponent_C::UseArm_Implementation(AActor* Caller
 			
 				break;
 			case EArmInputType::Block:
-			
+				if (HoldingItem != nullptr)
+				{
+					IIBSHoldingInteractiveable::Execute_ALTUseItemObj(HoldingItem,this,OwningPawn);
+				}
+				// else
+				// {
+				// 	GrabArm(Caller);
+				// }
 				break;
 			case EArmInputType::Reload:
-			
+				if (HoldingItem != nullptr)
+				{
+					IIBSHoldingInteractiveable::Execute_ALTUseItemObj(HoldingItem,this,OwningPawn);
+				}
+				// if (HoldingItem != nullptr)
+				// {
+				// 	IIBSHoldingInteractiveable::Execute_ReleaseItemObj(HoldingItem,this,OwningPawn);
+				// 	HoldingItem = nullptr;
+				// }
+				// else
+				// {
+				// 	GrabArm(Caller);
+				// }
 				break;
 			}
 		

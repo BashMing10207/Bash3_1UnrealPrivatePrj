@@ -7,6 +7,7 @@
 #include "Interface/IBSArmUSE.h"
 #include "Interface/IUsingArmType.h"
 
+
 #include "BSArmComponent.generated.h"
 
 class USpringArmComponent;
@@ -55,14 +56,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ABSItemObjBase* HoldingItem;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsRight = true;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="ArmPhysics")
-	class USceneComponent* ArmTarget;
+	class UStaticMeshComponent* ArmTarget;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
 	USceneComponent* InteractivePivot;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
-	TObjectPtr<USpringArmComponent> SprArmCompo;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
+	// TObjectPtr<USpringArmComponent> SprArmCompo;
+	 UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="__Hand")
+	 TObjectPtr<class UPhysicsHandleComponent> PhysArmCompo;
 protected:
 	// UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
 	// TObjectPtr<class UPhysicsConstraintComponent> BodyJoint;

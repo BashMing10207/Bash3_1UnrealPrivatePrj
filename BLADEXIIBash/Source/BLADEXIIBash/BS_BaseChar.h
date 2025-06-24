@@ -66,4 +66,12 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UBSCharacterStatComponent> StatComponent;
+public:
+	UFUNCTION(BlueprintCallable)
+	UBSCharacterStatComponent* GetStatComponent()
+	{
+		return StatComponent;
+	}
+	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
+	class USkeletalMeshComponent* GetSkeletalMeshComponent();
 };
