@@ -75,5 +75,5 @@ public:
 		return StatComponent;
 	}
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
-	class USkeletalMeshComponent* GetSkeletalMeshComponent();
+	TArray<class USkeletalMeshComponent*> GetSkeletalMeshComponent();
 };

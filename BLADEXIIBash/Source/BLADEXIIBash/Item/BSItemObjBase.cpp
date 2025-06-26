@@ -84,35 +84,52 @@ if (ItemHolder != nullptr)
 
 ABSItemObjBase* ABSItemObjBase::UseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(UseItemAnim);
-	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection()
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+	for (auto i : Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent())
+	{
+		i->GetAnimInstance()->Montage_Play(UseItemAnim);
+		i->GetAnimInstance()->Montage_JumpToSection(
 		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),UseItemAnim);
+	}
+
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection()
+	
 	return this;
 }
 
 ABSItemObjBase* ABSItemObjBase::ALTUseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
 	
-	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(AltUseItemAnim,
-	// UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(AltUseItemAnim);
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
-		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),AltUseItemAnim);
+	// // Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(AltUseItemAnim,
+	// // UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(AltUseItemAnim);
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+	// 	UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),AltUseItemAnim);
 
+	for (auto i : Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent())
+	{
+		i->GetAnimInstance()->Montage_Play(AltUseItemAnim);
+		i->GetAnimInstance()->Montage_JumpToSection(
+		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),AltUseItemAnim);
+	}
 	return this;
 }
 
 ABSItemObjBase* ABSItemObjBase::ReleaseItemObj_Implementation(ABSArmComponent_C* UsingArm, AActor* Caller)
 {
-	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(ReleaseItemAnim,
-	//UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(ReleaseItemAnim);
-	// (ReleaseItemAnim,
-	// FName(TEXT("Default")),0.1f,0.1f,1,1);
-	Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
-			UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),ReleaseItemAnim);
+	// // Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(ReleaseItemAnim,
+	// //UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),0.1f,0.1f,1,1);
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_Play(ReleaseItemAnim);
+	// // (ReleaseItemAnim,
+	// // FName(TEXT("Default")),0.1f,0.1f,1,1);
+	// Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent()->GetAnimInstance()->Montage_JumpToSection(
+	// 		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),ReleaseItemAnim);
 
+	for (auto i : Cast<ABS_BaseChar>(Caller)->GetSkeletalMeshComponent())
+	{
+		i->GetAnimInstance()->Montage_Play(ReleaseItemAnim);
+		i->GetAnimInstance()->Montage_JumpToSection(
+		UsingArm->bIsRight ? FName(TEXT("Default")):FName(TEXT("Mirror")),ReleaseItemAnim);
+	}
 	BeAttach(false);
 	
 	return this;

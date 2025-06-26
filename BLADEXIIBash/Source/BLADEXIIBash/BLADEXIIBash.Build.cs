@@ -8,7 +8,11 @@ public class BLADEXIIBash : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		PublicIncludePaths.AddRange(new string[] { "BLADEXIIBash" });
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","EnhancedInput","Niagara" });
+		PublicDependencyModuleNames.AddRange(new string[]
+		{
+			"Core", "CoreUObject", "Engine", "InputCore","EnhancedInput","Niagara"
+	
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

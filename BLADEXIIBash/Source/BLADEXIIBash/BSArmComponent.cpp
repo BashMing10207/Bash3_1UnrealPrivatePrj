@@ -201,6 +201,39 @@ void ABSArmComponent_C::GrabArm(AActor* Caller)
 
 	}
 }
+
+FHitResult ABSArmComponent_C::GetHitResult()
+{
+	FVector Start = GetActorTransform().GetLocation();
+	FVector End = GetActorTransform().GetLocation() + GetActorForwardVector()*GrabDistance;
+
+	if (!!InteractivePivot)
+	{
+		Start = InteractivePivot->GetComponentLocation();
+		End = InteractivePivot->GetComponentLocation() + InteractivePivot->GetForwardVector()*GrabDistance;
+	
+	}
+	
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);           // 자기 자신 무시
+	Params.AddIgnoredActor(OwningPawn);
+	
+	if (!!ReverseArmComponent)
+		Params.AddIgnoredActor(ReverseArmComponent);
+	Params.bTraceComplex = true;            // 정밀 충돌 검사
+	Params.bReturnPhysicalMaterial = false;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		Hit,
+		Start,
+		End,
+		ECC_Visibility,     // 사용할 채널
+		Params
+	);
+	return Hit;
+}
+
 void ABSArmComponent_C::DropItem()
 {
 	if (HoldingItem != nullptr)

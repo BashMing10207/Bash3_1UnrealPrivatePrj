@@ -18,7 +18,7 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	class USphereComponent* CollisionComp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Components")
 	class UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
@@ -30,4 +30,11 @@ protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 			   UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+public:
+	UFUNCTION(BlueprintCallable)
+	class UProjectileMovementComponent* GetProjectileMovement()
+	{
+		return ProjectileMovement;
+	}
 };

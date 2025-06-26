@@ -53,12 +53,14 @@ public:
 	void NoItemUseArm(AActor* Caller);
 
 	void GrabArm(AActor* Caller);
-
+public:
+	UFUNCTION(BlueprintCallable)
+	FHitResult GetHitResult();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ABSItemObjBase* HoldingItem;
-
+UFUNCTION(BLueprintCallable)
 	void DropItem();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
